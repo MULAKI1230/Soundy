@@ -23,6 +23,6 @@ class AlbumsController < ApplicationController
   private
 
   def album_params
-    params.require(:album).permit(:title, :artist_id, :cover_image)
+    params.require(:album).permit(:title, :artist_id, :year, :cover_image)
   end
 end

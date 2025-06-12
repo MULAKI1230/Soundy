@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Tracks</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <h1 class="text-2xl font-bold mb-4">All Tracks</h1>
+    <table class="min-w-full bg-white">
+    <thead>
+        <tr>
+        <th class="py-2">Title</th>
+        <th class="py-2">Artist</th>
+        <th class="py-2">Album</th>
+        <th class="py-2">Play</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @tracks.each do |track| %>
+        <tr>
+            <td class="py-2"><%= track.title %></td>
+            <td class="py-2"><%= track.artist.name %></td>
+            <td class="py-2"><%= track.album.title %></td>
+            <td class="py-2">
+            <% if track.audio_file.present? %>
+                <audio controls src="<%= track.audio_file %>" class="w-32"></audio>
+            <% end %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+    </table>
+  </body>
+</html> 

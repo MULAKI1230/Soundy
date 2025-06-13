@@ -38,18 +38,6 @@
       <button id="loop-btn" class="ml-4 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Loop Playlist">🔁</button>
       <button id="repeat-btn" class="ml-2 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Repeat One">🔂</button>
     </div>
-        <div id="player-bar"
-         data-turbo-permanent
-         class="fixed bottom-4 right-4 flex items-center bg-white shadow-2xl rounded-full px-6 py-3 w-[32rem] z-50 border border-gray-200">
-      <img id="player-cover" src="" alt="Album Cover" class="w-14 h-14 object-cover rounded-full border mr-4 hidden" />
-      <div class="flex-1">
-        <div id="player-title" class="font-bold text-lg"></div>
-        <div id="player-artist" class="text-gray-500 text-sm"></div>
-        <audio id="main-player" controls class="w-full mt-1"></audio>
-      </div>
-      <button id="loop-btn" class="ml-4 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Loop Playlist">🔁</button>
-      <button id="repeat-btn" class="ml-2 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Repeat One">🔂</button>
-    </div>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         const playerBar = document.getElementById('player-bar');

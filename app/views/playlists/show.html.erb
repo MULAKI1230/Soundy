@@ -7,7 +7,12 @@
   <ul id="playlist-tracks" class="mb-6 space-y-2">
     <% @playlist.tracks.each do |track| %>
       <li class="flex items-center justify-between bg-gray-50 rounded px-4 py-2 shadow-sm">
-        <a href="#" class="text-green-700 font-semibold play-track hover:underline" data-audio="<%= track.audio_file %>">
+        <a href="#" 
+           class="play-btn text-green-700 font-semibold hover:underline"
+           data-audio="<%= track.audio_file %>"
+           data-title="<%= track.title %>"
+           data-artist="<%= track.artist.name %>"
+           data-cover="<%= track.album&.cover_image %>">
           <%= track.title %>
         </a>
         <%= button_to "Remove", remove_track_playlist_path(@playlist, track_id: track.id), method: :delete, class: "text-red-500 px-3 py-1 rounded hover:bg-red-100 text-sm font-semibold" %>
@@ -16,42 +21,15 @@
   </ul>
 
   <%= link_to "Add Tracks to Playlist", add_tracks_playlist_path(@playlist), class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block font-semibold shadow" %>
-
-  <audio id="playlist-player" controls class="fixed bottom-4 left-4 w-96 hidden bg-white shadow-lg rounded"></audio>
-
   <%= link_to "Back to Playlists", playlists_path, class: "inline-block mt-8 text-blue-600 underline" %>
 </div>
 
 <script>
-  const player = document.getElementById('playlist-player');
-  const playLinks = Array.from(document.querySelectorAll('.play-track'));
-  let currentTrackIdx = 0;
-
   // Play All logic
   document.getElementById('play-all-btn').addEventListener('click', function() {
+    const playLinks = Array.from(document.querySelectorAll('.play-btn'));
     if (playLinks.length > 0) {
-      currentTrackIdx = 0;
       playLinks[0].click();
-    }
-  });
-
-  // Play single track logic
-  playLinks.forEach((link, idx) => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const src = this.dataset.audio;
-      player.src = src.startsWith('/') ? window.location.origin + src : src;
-      player.classList.remove('hidden');
-      player.play();
-      currentTrackIdx = idx;
-    });
-  });
-
-  // Auto play next track when ended (if Play All was used)
-  player.addEventListener('ended', function() {
-    if (currentTrackIdx < playLinks.length - 1) {
-      currentTrackIdx++;
-      playLinks[currentTrackIdx].click();
     }
   });
 </script>

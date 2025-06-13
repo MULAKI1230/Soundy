@@ -1,4 +1,3 @@
-<!-- filepath: c:\project\soundy\app\views\artists\show.html.erb -->
 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow p-8 mt-8">
   <div class="flex items-center gap-6 mb-6">
     <div class="w-32 h-32 bg-gray-200 rounded-lg border"></div>
@@ -16,19 +15,23 @@
           <button 
             class="play-btn bg-gradient-to-r from-green-400 to-green-600 text-white px-2 py-1 rounded-full shadow hover:scale-110 transition-all"
             data-audio="<%= track.audio_file %>"
-            data-title="<%= track.title %>">
+            data-title="<%= track.title %>"
+            data-artist="<%= @artist.name %>"
+            data-cover="<%= track.album&.cover_image %>">
             ▶️
           </button>
         <% end %>
-        <span class="font-semibold cursor-pointer track-title" data-audio="<%= track.audio_file %>" data-title="<%= track.title %>">
+        <span class="font-semibold cursor-pointer track-title"
+              data-audio="<%= track.audio_file %>"
+              data-title="<%= track.title %>"
+              data-artist="<%= @artist.name %>"
+              data-cover="<%= track.album&.cover_image %>">
           <%= track.title %>
         </span>
         <span class="text-gray-500 text-sm">(<%= track.album.title %>)</span>
       </li>
     <% end %>
   </ul>
-
-  <audio id="artist-player" controls class="mt-6 w-full hidden"></audio>
 
   <h2 class="text-xl font-semibold mb-2">Albums</h2>
   <ul>
@@ -48,25 +51,37 @@
 </div>
 
 <script>
+  // Semua tombol play dan judul track akan mengontrol player bar utama di layout
   document.addEventListener("DOMContentLoaded", function() {
-    const player = document.getElementById('artist-player');
-    // Play via tombol
-    document.querySelectorAll('.play-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        const src = this.getAttribute('data-audio');
-        player.src = src.startsWith('/') ? window.location.origin + src : src;
-        player.classList.remove('hidden');
-        player.play();
-      });
-    });
-    // Play via klik judul lagu
-    document.querySelectorAll('.track-title').forEach(span => {
-      span.addEventListener('click', function() {
-        const src = this.getAttribute('data-audio');
-        if (!src) return;
-        player.src = src.startsWith('/') ? window.location.origin + src : src;
-        player.classList.remove('hidden');
-        player.play();
+    function playToMainPlayer(el) {
+      const playerBar = document.getElementById('player-bar');
+      const player = document.getElementById('main-player');
+      const cover = document.getElementById('player-cover');
+      const title = document.getElementById('player-title');
+      const artist = document.getElementById('player-artist');
+      const src = el.getAttribute('data-audio');
+      const coverUrl = el.getAttribute('data-cover');
+      const trackTitle = el.getAttribute('data-title');
+      const trackArtist = el.getAttribute('data-artist');
+      if (!src) return;
+      player.src = src.startsWith('/') ? window.location.origin + src : src;
+      title.textContent = trackTitle || '';
+      artist.textContent = trackArtist || '';
+      if (coverUrl) {
+        cover.src = coverUrl.startsWith('/') ? window.location.origin + coverUrl : coverUrl;
+        cover.classList.remove('hidden');
+      } else {
+        cover.src = '';
+        cover.classList.add('hidden');
+      }
+      playerBar.classList.remove('hidden');
+      player.play();
+    }
+
+    document.querySelectorAll('.play-btn, .track-title').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        playToMainPlayer(this);
       });
     });
   });

@@ -1,0 +1,24 @@
+<%= form_with(model: track, local: true, html: { multipart: true, class: "space-y-6" }) do |form| %>
+  <div>
+    <%= form.label :title, "Judul Lagu", class: "block font-semibold mb-1" %>
+    <%= form.text_field :title, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+  </div>
+  <div>
+    <%= form.label :artist_id, "Artis", class: "block font-semibold mb-1" %>
+    <%= form.collection_select :artist_id, Artist.all, :id, :name, prompt: "Pilih Artis", class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+    <%= link_to "Tambah Artis Baru", new_artist_path, class: "text-blue-500 underline ml-2 text-sm" %>
+  </div>
+  <div>
+    <%= form.label :album_id, "Album", class: "block font-semibold mb-1" %>
+    <%= form.collection_select :album_id, Album.all, :id, :title, prompt: "Pilih Album", class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+    <%= link_to "Tambah Album Baru", new_album_path, class: "text-blue-500 underline ml-2 text-sm" %>
+  </div>
+  <div>
+    <%= form.label :audio_file, "File Audio (mp3)", class: "block font-semibold mb-1" %>
+    <%= form.file_field :audio_file, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2", accept: "audio/mp3,audio/mpeg" %>
+    <small class="text-gray-500">File harus bertipe mp3</small>
+  </div>
+  <div>
+    <%= form.submit "Simpan", class: "bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded font-semibold shadow" %>
+  </div>
+<% end %>

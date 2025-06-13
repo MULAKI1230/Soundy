@@ -1,0 +1,15 @@
+<div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8 mt-10">
+  <h1 class="text-2xl font-bold mb-6">Add Tracks to <span class="text-green-700"><%= @playlist.name %></span></h1>
+
+  <ul class="space-y-2 mb-6">
+    <% @tracks.each do |track| %>
+      <li class="flex items-center justify-between bg-gray-50 rounded px-4 py-2 shadow-sm">
+        <span class="font-semibold"><%= track.title %></span>
+        <span class="text-gray-500 text-sm ml-2"><%= track.artist.name %></span>
+        <%= button_to "Add", add_track_playlist_path(@playlist, track_id: track.id), method: :post, class: "bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded shadow text-sm font-semibold ml-4" %>
+      </li>
+    <% end %>
+  </ul>
+
+  <%= link_to "Back to Playlist", playlist_path(@playlist), class: "inline-block mt-6 text-blue-600 underline" %>
+</div>

@@ -1,0 +1,17 @@
+<h1 class="text-2xl font-bold mb-4"><%= @track.title %></h1>
+
+<p><strong>Artis:</strong> <%= @track.artist&.name %></p>
+<p><strong>Album:</strong> <%= @track.album&.title %></p>
+
+<% if @track.audio_file.present? %>
+  <audio controls class="mt-4">
+    <source src="<%= @track.audio_file %>" type="audio/mp3">
+    Browser Anda tidak mendukung audio tag.
+  </audio>
+<% end %>
+
+<div class="mt-6 flex gap-4">
+  <%= link_to 'Edit', edit_track_path(@track), class: 'bg-yellow-500 text-white px-4 py-2 rounded' %>
+  <%= button_to 'Delete', track_path(@track), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-red-500 text-white px-4 py-2 rounded' %>
+  <%= link_to "Back to Tracks", tracks_path, class: "text-blue-600 underline ml-4" %>
+</div>

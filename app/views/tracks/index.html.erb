@@ -1,36 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Tracks</title>
-      <script src="https://cdn.tailwindcss.com"></script>
-  </head>
-  <body>
-    <h1 class="text-2xl font-bold mb-4">All Tracks</h1>
-    <table class="min-w-full bg-white">
-    <thead>
-        <tr>
-        <th class="py-2">Title</th>
-        <th class="py-2">Artist</th>
-        <th class="py-2">Album</th>
-        <th class="py-2">Play</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @tracks.each do |track| %>
-        <tr>
-            <td class="py-2"><%= track.title %></td>
-            <td class="py-2"><%= track.artist.name %></td>
-            <td class="py-2"><%= track.album.title %></td>
-            <td class="py-2">
-            <% if track.audio_file.present? %>
-                <audio controls src="<%= track.audio_file %>" class="w-32"></audio>
+<div class="flex min-h-screen bg-gray-100">
+  <aside class="w-64 bg-gray-900 text-white flex-shrink-0 hidden md:block">
+    <div class="p-6 font-bold text-2xl">Soundy</div>
+    <nav class="mt-8 space-y-2">
+      <%= link_to "Home", tracks_path, class: "block px-6 py-2 hover:bg-gray-800 rounded" %>
+      <%= link_to "Artists", artists_path, class: "block px-6 py-2 hover:bg-gray-800 rounded" %>
+      <%= link_to "Albums", albums_path, class: "block px-6 py-2 hover:bg-gray-800 rounded" %>
+      <%= link_to "Playlists", playlists_path, class: "block px-6 py-2 hover:bg-gray-800 rounded" %>
+      <%= link_to "Add New Track", new_track_path, class: "block px-6 py-2 text-green-400 hover:bg-gray-800 rounded" %>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="flex-1 p-8">
+    <h1 class="text-3xl font-bold mb-6">All Tracks</h1>
+
+    <%= form_with url: tracks_path, method: :get, local: true, class: "mb-6 flex gap-2" do %>
+      <input type="text" name="q" value="<%= params[:q] %>" placeholder="Cari lagu, artis, atau album..." class="border p-2 rounded w-64" />
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Cari</button>
+    <% end %>
+
+    <div class="overflow-x-auto rounded shadow">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 text-left">Title</th>
+            <th class="py-2 px-4 text-left">Artist</th>
+            <th class="py-2 px-4 text-left">Album</th>
+            <th class="py-2 px-4 text-left">Play</th>
+            <th class="py-2 px-4 text-left">Actions</th>
+          </tr>
+        </thead>
+            <tbody>
+            <% @tracks.each do |track| %>
+                <tr class="border-b hover:bg-gray-50 transition">
+                <td class="py-2 px-4"><%= track.title %></td>
+                <td class="py-2 px-4">
+                    <%= link_to track.artist.name, artist_path(track.artist), class: "text-blue-600 underline" %>
+                </td>
+                <td class="py-2 px-4">
+                    <%= link_to track.album.title, album_path(track.album), class: "text-blue-600 underline" %>
+                </td>
+                <td class="py-2 px-4">
+                    <% if track.audio_file.present? %>
+                    <button 
+                        class="play-btn bg-gradient-to-r from-green-400 to-green-600 text-white px-4 py-2 rounded-full shadow hover:scale-110 hover:shadow-lg transition-all flex items-center gap-2 group"
+                        data-audio="<%= track.audio_file %>"
+                        data-title="<%= track.title %>"
+                        data-artist="<%= track.artist.name %>"
+                        data-cover="<%= track.album.cover_image if track.album %>">
+                        <span class="group-hover:hidden">▶️</span>
+                        <span class="hidden group-hover:inline">🎵</span>
+                        <span class="font-bold">Play</span>
+                    </button>
+                    <% end %>
+                </td>
+                <td class="py-2 px-4">
+                    <%= link_to 'Show', track_path(track), class: 'text-blue-500' %>
+                </td>
+                </tr>
             <% end %>
-            </td>
-        </tr>
-        <% end %>
-    </tbody>
-    </table>
-  </body>
-</html> 
+            </tbody>
+      </table>
+    </div>
+  </main>
+  
+</div>

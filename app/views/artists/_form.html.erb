@@ -1,0 +1,39 @@
+<%= form_with(model: artist, local: true, html: { multipart: true, class: "space-y-6" }) do |form| %>
+  <div class="mb-4">
+    <%= form.label :name, "Nama Artis", class: "block font-semibold mb-1" %>
+    <%= form.text_field :name, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :bio, "Bio", class: "block font-semibold mb-1" %>
+    <%= form.text_area :bio, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2", rows: 3 %>
+  </div>
+  <div class="mb-4">
+    <%= form.label :profile_image, "Foto Profil", class: "block font-semibold mb-1" %>
+    <%= form.file_field :profile_image, id: "profile_image_input", class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2", accept: "image/*" %>
+    <small class="text-gray-500">Upload file gambar (jpg/png)</small>
+    <div class="mt-3">
+      <img id="profile_image_preview" src="#" alt="Preview" class="hidden w-24 h-24 object-cover rounded-full border mx-auto" />
+    </div>
+  </div>
+  <div>
+    <%= form.submit class: "bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded font-semibold shadow" %>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const input = document.getElementById('profile_image_input');
+    const preview = document.getElementById('profile_image_preview');
+    if(input) {
+      input.addEventListener('change', function(e) {
+        const [file] = input.files;
+        if (file) {
+          preview.src = URL.createObjectURL(file);
+          preview.classList.remove('hidden');
+        } else {
+          preview.classList.add('hidden');
+        }
+      });
+    }
+  });
+</script>

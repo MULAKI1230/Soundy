@@ -1,0 +1,47 @@
+<div class="max-w-5xl mx-auto bg-white rounded-lg shadow p-8 mt-10 flex flex-col md:flex-row gap-10">
+  <!-- Kiri: Info Album -->
+  <div class="flex flex-col items-center md:items-start w-full md:w-1/3">
+    <h1 class="text-2xl font-bold mb-1"><%= @album.title %></h1>
+    <p class="text-gray-600 mb-4">Tahun: <%= @album.year %></p>
+    <% if @album.cover_image.present? %>
+      <img src="<%= @album.cover_image %>" alt="Cover <%= @album.title %>" class="w-48 h-48 object-cover rounded mb-6 shadow border" />
+    <% else %>
+      <div class="w-48 h-48 bg-gray-200 rounded mb-6 shadow border flex items-center justify-center text-gray-400 text-5xl">🎵</div>
+    <% end %>
+    <button id="play-all-btn"
+      class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-semibold flex items-center gap-2 shadow transition-all mt-2">
+      ▶️ Play All
+    </button>
+  </div>
+
+  <!-- Kanan: Daftar Lagu -->
+  <div class="flex-1">
+    <h2 class="text-xl font-semibold mb-4">Tracks</h2>
+    <ul class="space-y-2">
+      <% @album.tracks.each do |track| %>
+        <li class="flex items-center gap-3">
+          <button
+            class="play-btn bg-gradient-to-r from-green-400 to-green-600 text-white px-3 py-1 rounded-full shadow hover:scale-110 transition-all"
+            data-audio="<%= track.audio_file %>"
+            data-title="<%= track.title %>"
+            data-artist="<%= @album.artist.name if @album.artist %>"
+            data-cover="<%= @album.cover_image %>">
+            ▶️
+          </button>
+          <span class="font-semibold"><%= track.title %></span>
+        </li>
+      <% end %>
+    </ul>
+    <%= link_to "Back to Albums", albums_path, class: "inline-block mt-8 bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded shadow" %>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const playAllBtn = document.getElementById('play-all-btn');
+    const playBtns = Array.from(document.querySelectorAll('.play-btn'));
+    playAllBtn.addEventListener('click', function() {
+      if (playBtns.length > 0) playBtns[0].click();
+    });
+  });
+</script>

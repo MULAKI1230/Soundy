@@ -1,0 +1,27 @@
+<div class="max-w-lg mx-auto bg-white rounded-lg shadow p-8 mt-10 border-2 border-green-300">
+  <h1 class="text-2xl font-bold mb-6">Create New Playlist</h1>
+
+  <% if @playlist.errors.any? %>
+    <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+      <ul class="list-disc pl-5">
+        <% @playlist.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: @playlist, local: true) do |form| %>
+    <div class="mb-6">
+      <%= form.label :name, "Playlist Name", class: "block font-semibold mb-2" %>
+      <%= form.text_field :name, class: "w-full rounded border-gray-300 focus:border-green-400 focus:ring-green-400 p-2" %>
+    </div>
+    <div>
+      <%= form.submit "Create Playlist", class: "bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold shadow" %>
+    </div>
+  <% end %>
+
+  <div class="mt-8">
+    <%= link_to "Back to Playlists", playlists_path, class: "text-blue-600 underline" %>
+  </div>
+</div>

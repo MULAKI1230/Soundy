@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
+    <script src="https://cdn.tailwindcss.com"></script>
+
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -26,5 +28,124 @@
     <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>
+    <div id="player-bar" class="fixed bottom-4 right-4 flex items-center bg-white shadow-2xl rounded-full px-6 py-3 w-[32rem] z-50 border border-gray-200">
+      <img id="player-cover" src="" alt="Album Cover" class="w-14 h-14 object-cover rounded-full border mr-4 hidden" />
+      <div class="flex-1">
+        <div id="player-title" class="font-bold text-lg"></div>
+        <div id="player-artist" class="text-gray-500 text-sm"></div>
+        <audio id="main-player" controls class="w-full mt-1"></audio>
+      </div>
+      <button id="loop-btn" class="ml-4 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Loop Playlist">🔁</button>
+      <button id="repeat-btn" class="ml-2 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Repeat One">🔂</button>
+    </div>
+        <div id="player-bar"
+         data-turbo-permanent
+         class="fixed bottom-4 right-4 flex items-center bg-white shadow-2xl rounded-full px-6 py-3 w-[32rem] z-50 border border-gray-200">
+      <img id="player-cover" src="" alt="Album Cover" class="w-14 h-14 object-cover rounded-full border mr-4 hidden" />
+      <div class="flex-1">
+        <div id="player-title" class="font-bold text-lg"></div>
+        <div id="player-artist" class="text-gray-500 text-sm"></div>
+        <audio id="main-player" controls class="w-full mt-1"></audio>
+      </div>
+      <button id="loop-btn" class="ml-4 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Loop Playlist">🔁</button>
+      <button id="repeat-btn" class="ml-2 px-2 py-1 rounded bg-gray-200 hover:bg-gray-300 text-gray-700" title="Repeat One">🔂</button>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const playerBar = document.getElementById('player-bar');
+        const player = document.getElementById('main-player');
+        const cover = document.getElementById('player-cover');
+        const title = document.getElementById('player-title');
+        const artist = document.getElementById('player-artist');
+        const loopBtn = document.getElementById('loop-btn');
+        const repeatBtn = document.getElementById('repeat-btn');
+        let currentBtn = null;
+        let isLooping = false;
+        let isRepeatOne = false;
+
+        // Ambil semua tombol play dan data lagu
+        const playBtns = Array.from(document.querySelectorAll('.play-btn'));
+        const tracks = playBtns.map(btn => ({
+          audio: btn.getAttribute('data-audio'),
+          cover: btn.getAttribute('data-cover'),
+          title: btn.getAttribute('data-title'),
+          artist: btn.getAttribute('data-artist'),
+          btn: btn
+        }));
+        let currentIndex = -1;
+
+        // Loop playlist
+        loopBtn.addEventListener('click', () => {
+          isLooping = !isLooping;
+          loopBtn.classList.toggle('bg-green-400', isLooping);
+          loopBtn.classList.toggle('text-white', isLooping);
+          if (isLooping) {
+            isRepeatOne = false;
+            repeatBtn.classList.remove('bg-green-400', 'text-white');
+          }
+        });
+
+        // Repeat one
+        repeatBtn.addEventListener('click', () => {
+          isRepeatOne = !isRepeatOne;
+          repeatBtn.classList.toggle('bg-green-400', isRepeatOne);
+          repeatBtn.classList.toggle('text-white', isRepeatOne);
+          if (isRepeatOne) {
+            isLooping = false;
+            loopBtn.classList.remove('bg-green-400', 'text-white');
+          }
+        });
+
+        playBtns.forEach((btn, idx) => {
+          btn.addEventListener('click', function() {
+            const src = this.getAttribute('data-audio');
+            const coverUrl = this.getAttribute('data-cover');
+            const trackTitle = this.getAttribute('data-title');
+            const trackArtist = this.getAttribute('data-artist');
+            if (currentBtn === this && !player.paused) {
+              player.pause();
+              return;
+            }
+            player.src = src;
+            title.textContent = trackTitle || '';
+            artist.textContent = trackArtist || '';
+            if (coverUrl) {
+              cover.src = coverUrl.startsWith('/') ? window.location.origin + coverUrl : coverUrl;
+              cover.classList.remove('hidden');
+            } else {
+              cover.src = '';
+              cover.classList.add('hidden');
+            }
+            playerBar.classList.remove('hidden');
+            player.play();
+            currentBtn = this;
+            currentIndex = idx;
+          });
+        });
+
+        // Logic looping dan repeat one
+        player.addEventListener('ended', () => {
+          if (isRepeatOne) {
+            player.currentTime = 0;
+            player.play();
+          } else if (isLooping) {
+            currentIndex = (currentIndex + 1) % tracks.length;
+            const next = tracks[currentIndex];
+            player.src = next.audio;
+            title.textContent = next.title || '';
+            artist.textContent = next.artist || '';
+            if (next.cover) {
+              cover.src = next.cover.startsWith('/') ? window.location.origin + next.cover : next.cover;
+              cover.classList.remove('hidden');
+            } else {
+              cover.src = '';
+              cover.classList.add('hidden');
+            }
+            player.play();
+            currentBtn = next.btn;
+          }
+        });
+      });
+    </script>
   </body>
 </html>

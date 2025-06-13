@@ -13,6 +13,14 @@ class AlbumsController < ApplicationController
 
   def create
     @album = Album.new(album_params)
+    if params[:album][:cover_image]
+      uploaded_io = params[:album][:cover_image]
+      filename = SecureRandom.hex + File.extname(uploaded_io.original_filename)
+      filepath = Rails.root.join('public', 'album', filename)
+      FileUtils.mkdir_p(File.dirname(filepath))
+      File.open(filepath, 'wb') { |f| f.write(uploaded_io.read) }
+      @album.cover_image = "/album/#{filename}"
+    end
     if @album.save
       redirect_to @album
     else

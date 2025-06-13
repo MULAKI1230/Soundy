@@ -1,5 +1,5 @@
-class AddProfileImageToArtists < ActiveRecord::Migration[8.0]
+class AddProfileImageToArtists < ActiveRecord::Migration[6.1]
   def change
-    add_column :artists, :Profile_Image, :string
+    add_column :artists, :profile_image, :string
   end
 end

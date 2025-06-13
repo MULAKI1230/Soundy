@@ -1,0 +1,21 @@
+<div class="max-w-3xl mx-auto bg-white rounded-lg shadow p-8 mt-10">
+  <h1 class="text-2xl font-bold mb-6">Daftar Album</h1>
+  <ul class="space-y-4">
+    <% @albums.each do |album| %>
+      <li class="flex items-center gap-4 bg-gray-50 rounded p-4 shadow-sm">
+        <% if album.cover_image.present? %>
+          <img src="<%= album.cover_image %>" alt="Cover <%= album.title %>" class="w-16 h-16 object-cover rounded border" />
+        <% else %>
+          <div class="w-16 h-16 bg-gray-200 rounded border flex items-center justify-center text-gray-400 text-2xl">🎵</div>
+        <% end %>
+        <div class="flex-1">
+          <%= link_to album.title, album_path(album), class: "text-blue-600 underline font-semibold text-lg" %>
+          <div class="text-gray-500 text-sm">oleh <%= album.artist.name %></div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <div class="mt-8">
+    <%= link_to "Kembali ke Tracks", tracks_path, class: "bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" %>
+  </div>
+</div>

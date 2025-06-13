@@ -26,7 +26,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_06_12_094038) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "bio"
-    t.string "Profile_Image"
+    t.string "profile_image"
   end
 
   create_table "playlist_tracks", force: :cascade do |t|

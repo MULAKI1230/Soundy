@@ -1,0 +1,23 @@
+<%= form_with(model: album, local: true, html: { multipart: true, class: "space-y-6" }) do |form| %>
+  <div>
+    <%= form.label :title, "Judul Album", class: "block font-semibold mb-1" %>
+    <%= form.text_field :title, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+  </div>
+  <div>
+    <%= form.label :artist_id, "Artis", class: "block font-semibold mb-1" %>
+    <%= form.collection_select :artist_id, Artist.all, :id, :name, prompt: "Pilih Artis", class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+    <%= link_to "Tambah Artis Baru", new_artist_path, class: "text-blue-500 underline ml-2 text-sm" %>
+  </div>
+  <div>
+    <%= form.label :year, "Tahun Rilis", class: "block font-semibold mb-1" %>
+    <%= form.number_field :year, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2" %>
+  </div>
+  <div>
+    <%= form.label :cover_image, "Cover Image", class: "block font-semibold mb-1" %>
+    <%= form.file_field :cover_image, class: "w-full rounded border-gray-300 focus:border-blue-400 focus:ring-blue-400 p-2", accept: "image/*" %>
+    <small class="text-gray-500">Upload file gambar (jpg/png)</small>
+  </div>
+  <div>
+    <%= form.submit "Simpan", class: "bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded font-semibold shadow" %>
+  </div>
+<% end %>

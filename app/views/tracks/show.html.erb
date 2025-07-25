@@ -1,17 +1,25 @@
-<h1 class="text-2xl font-bold mb-4"><%= @track.title %></h1>
+<div class="max-w-xl mx-auto mt-10 bg-gradient-to-br from-gray-50 via-white to-gray-200 shadow-lg rounded-lg p-8">
+  <div class="flex items-center gap-6 mb-6">
+    <% if @track.album&.cover_image.present? %>
+      <img src="<%= @track.album.cover_image %>" alt="Cover Album" class="w-32 h-32 object-cover rounded shadow" />
+    <% end %>
+    <div>
+      <h1 class="text-3xl font-bold mb-2"><%= @track.title %></h1>
+      <p class="mb-1"><strong>Artis:</strong> <%= @track.artist&.name %></p>
+      <p><strong>Album:</strong> <%= @track.album&.title %></p>
+    </div>
+  </div>
 
-<p><strong>Artis:</strong> <%= @track.artist&.name %></p>
-<p><strong>Album:</strong> <%= @track.album&.title %></p>
+  <% if @track.audio_file.present? %>
+    <audio controls class="w-full mb-6">
+      <source src="<%= @track.audio_file %>" type="audio/mp3">
+      Browser Anda tidak mendukung audio tag.
+    </audio>
+  <% end %>
 
-<% if @track.audio_file.present? %>
-  <audio controls class="mt-4">
-    <source src="<%= @track.audio_file %>" type="audio/mp3">
-    Browser Anda tidak mendukung audio tag.
-  </audio>
-<% end %>
-
-<div class="mt-6 flex gap-4">
-  <%= link_to 'Edit', edit_track_path(@track), class: 'bg-yellow-500 text-white px-4 py-2 rounded' %>
-  <%= button_to 'Delete', track_path(@track), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-red-500 text-white px-4 py-2 rounded' %>
-  <%= link_to "Back to Tracks", tracks_path, class: "text-blue-600 underline ml-4" %>
+  <div class="flex gap-4">
+    <%= link_to 'Edit', edit_track_path(@track), class: 'bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded shadow' %>
+    <%= button_to 'Delete', track_path(@track), method: :delete, data: { confirm: 'Are you sure?' }, class: 'bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow' %>
+    <%= link_to "Back to Tracks", tracks_path, class: "ml-auto text-blue-600 underline" %>
+  </div>
 </div>
